@@ -20,19 +20,20 @@ move(Frm, 11, To):- member([Frm, To], [[10, 12], [12, 10]]).
 move(Frm, 12, To):- member([Frm, To], [[11, 13], [13, 11]]).
 move(Frm, 13, To):- member([Frm, To], [[12, 14], [14, 12]]).
 
-% pass 0 and 5 when user runs go() method
-go():-go(0, 5).
+% play game for all positions starting at position 0 to the Max position the user passed
+go(Max):- 
+	Max < 15,
+	numlist(0, Max, Iterations),
+	maplist(playGame(), Iterations),
+	!.
 
-% run makeMoves and printBoard for board position 0 through 5
-go(N, M):- 
-    N < M,
+% run makeMoves and printBoard for board for all starting positions specified
+playGame(N):- 
     format("=== ~w === ~n~n", [N]),
     numlist(0, 14, InitialList),
     select(N, InitialList, Filled),
     makeMoves([N], Filled, [], Board),
-    printBoard(Board, [N]),
-    K is N+1,
-    go(K, M).
+    printBoard(Board, [N]).
 
 % reset board when all moves have been make
 makeMoves(_, [_], Moves, Board):-
@@ -49,21 +50,23 @@ makeMoves(Open, Filled, Moves, Board):-
 % print method for when there are no more moves left.
 printBoard([], Free) :-
 	numlist(0,14, Board),
-	maplist(\X^I^(member(X, Free) -> I = '.'; I = 'x'), Board, [I1,I2,I3,I4,I5,I6,I7,I8,I9,I10,I11,I12,I13,I14,I15]),
-	format('    ~w        ~n', [I1]),
-	format('   ~w ~w      ~n', [I2,I3]),
-	format('  ~w ~w ~w    ~n', [I4,I5,I6]),
-	format(' ~w ~w ~w ~w  ~n', [I7,I8,I9,I10]),
-	format('~w ~w ~w ~w ~w~n~n', [I11,I12,I13,I14,I15]).
+	maplist(\X^I^(member(X, Free) -> I = '.'; I = 'x'), Board,
+		[Hole1,Hole2,Hole3,Hole4,Hole5,Hole6,Hole7,Hole8,Hole9,Hole10,Hole11,Hole12,Hole13,Hole14,Hole15]),
+	format('    ~w        ~n', [Hole1]),
+	format('   ~w ~w      ~n', [Hole2,Hole3]),
+	format('  ~w ~w ~w    ~n', [Hole4,Hole5,Hole6]),
+	format(' ~w ~w ~w ~w  ~n', [Hole7,Hole8,Hole9,Hole10]),
+	format('~w ~w ~w ~w ~w~n~n', [Hole11,Hole12,Hole13,Hole14,Hole15]).
  
 % print method that 
 printBoard([move(Start, Middle, End) | Tail], Free) :-
 	numlist(0,14, Board),
-	maplist(\X^I^(member(X, Free) -> I = '.'; I = 'x'), Board, [I1,I2,I3,I4,I5,I6,I7,I8,I9,I10,I11,I12,I13,I14,I15]),
-	format('    ~w        ~n', [I1]),
-	format('   ~w ~w      ~n', [I2,I3]),
-	format('  ~w ~w ~w    ~n', [I4,I5,I6]),
-	format(' ~w ~w ~w ~w  ~n', [I7,I8,I9,I10]),
-	format('~w ~w ~w ~w ~w~n~n', [I11,I12,I13,I14,I15]),
+	maplist(\X^I^(member(X, Free) -> I = '.'; I = 'x'), Board,
+		[Hole1,Hole2,Hole3,Hole4,Hole5,Hole6,Hole7,Hole8,Hole9,Hole10,Hole11,Hole12,Hole13,Hole14,Hole15]),
+	format('    ~w        ~n', [Hole1]),
+	format('   ~w ~w      ~n', [Hole2,Hole3]),
+	format('  ~w ~w ~w    ~n', [Hole4,Hole5,Hole6]),
+	format(' ~w ~w ~w ~w  ~n', [Hole7,Hole8,Hole9,Hole10]),
+	format('~w ~w ~w ~w ~w~n~n', [Hole11,Hole12,Hole13,Hole14,Hole15]),
 	select(End, Free, Free1),
 	printBoard(Tail,  [Start, Middle | Free1]).
